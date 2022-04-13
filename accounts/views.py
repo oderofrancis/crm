@@ -28,6 +28,7 @@ def product(request):
 	return render(request,'accounts/product.html',context)
 
 def customer(request,pk_test):
+	
 	customer = Customer.objects.get(id=pk_test)
 
 	orders = customer.order_set.all()
