@@ -5,6 +5,27 @@ from .filters import OrderFilter
 
 # Create your views here.
 
+def registerPage(request):
+
+	form = CreateUserForm()
+
+	if request.method == 'POST':
+		form = CreateUserForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect('login')
+
+	context = {'form':form}
+
+	return render(request,'accounts/register.html',context)
+
+def loginPage(request):
+	context = {
+
+	}
+
+	return render(request,'accounts/login.html',context)
+
 def dashboard(request):
 	customers = Customer.objects.all()
 	orders = Order.objects.all()
