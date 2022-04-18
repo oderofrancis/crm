@@ -16,22 +16,18 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
+        {% if request.user.is_staff %}
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'dashboard' %}">Dashboard <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'home' %}">Dashboard <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'product' %}">Products</a>
         </li>
+        {% endif %}
       </ul>
     </div>
 
     <span class="hello-msg">Hello,{{request.user}}</span>
-    <span><a class="hello-msg" href="{% url 'logout' %)">Logout</a></span>
+    <span><a class="hello-msg" href="{% url 'logout' %}">Logout</a></span>
   </nav>
   
-
-
-  
-Customer Relationship Management
-
-CRM stands for Customer Relationship Management. It's a technology used to manage interactions with customers and potential customers. A CRM system helps organisations build customer relationships and streamline processes so they can increase sales, improve customer service, and increase profitability.

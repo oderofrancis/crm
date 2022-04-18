@@ -6,27 +6,37 @@ from django.contrib import messages
 
 from django.contrib.auth import authenticate,login,logout
 
+from django.contrib.auth.decorators import login_required
+from .decorators import unauthenticated_user,allowed_users,admin_only
+
+from django.contrib.auth.models import Group
+
 # Create your views here.
 
+@unauthenticated_user
 def registerPage(request):
-
 	form = CreateUserForm()
 
 	if request.method == 'POST':
 		form = CreateUserForm(request.POST)
 		if form.is_valid():
-			form.save()
-			user = form.cleaned_data.get('username')
-			messages.success(request, 'Account was created for' + user)
+			user = form.save()
+			username = form.cleaned_data.get('username')
+
+			group = Group.objects.get(name='customer')
+			user.groups.add(group)
+
+			messages.success(request, 'Account was created for' + username)
 
 			return redirect('login')
 
 	context = {'form':form}
 
+
 	return render(request,'accounts/register.html',context)
 
+@unauthenticated_user
 def loginPage(request):
-
 	if request.method == 'POST':
 		username = request.POST.get('username')
 		password = request.POST.get('password')
@@ -35,7 +45,7 @@ def loginPage(request):
 
 		if user is not None:
 			login(request,user)
-			return redirect('dashboard')
+			return redirect('home')
 
 		else:
 			messages.info(request, 'Username or Password id incorrect')
@@ -49,7 +59,10 @@ def logoutUser(request):
 	logout(request)
 	return redirect('login')
 
-def dashboard(request):
+
+@login_required(login_url='login')
+@admin_only
+def home(request):
 	customers = Customer.objects.all()
 	orders = Order.objects.all()
 
@@ -66,6 +79,14 @@ def dashboard(request):
 
 	return render(request,'accounts/dashboard.html',context)
 
+# for user-page
+
+def userPage(request):
+	context = {}
+	return render(request,'accounts/user.html',context)
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def product(request):
 	products = Product.objects.all()
 
@@ -73,6 +94,10 @@ def product(request):
 
 	return render(request,'accounts/product.html',context)
 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def customer(request,pk_test):
 	
 	customer = Customer.objects.get(id=pk_test)
@@ -89,6 +114,10 @@ def customer(request,pk_test):
 	
 	return render(request,'accounts/customer.html',context)
 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def createOrder(request,pk):
 	customer = Customer.objects.get(id=pk)
 	form = OrderForm(initial={'customer':customer})
@@ -102,6 +131,10 @@ def createOrder(request,pk):
 
 	return render(request, 'accounts/order_form.html',context)
 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def updateOrder(request,pk):
 
 	order = Order.objects.get(id=pk)
@@ -117,6 +150,10 @@ def updateOrder(request,pk):
 
 	return render(request,'accounts/order_form.html',context)
 
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['admin'])
 def deleteOrder(request,pk):
 	order = Order.objects.get(id=pk)
 	if request.method =='POST':
