@@ -98,6 +98,18 @@ def userPage(request):
 				}
 	return render(request,'accounts/user.html',context)
 
+# for account settings
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['customer'])
+
+def accountSettings(request):
+	context = {}
+
+	return render(request,'accounts/account_settings.html',context)
+
+
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['admin'])
 def product(request):
