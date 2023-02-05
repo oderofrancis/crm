@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
 
 <style>
@@ -22,12 +24,16 @@
 			<hr>
 			<h3 style="text-align:center;">Account settings</h3>
 			<hr>
-			<img class="profile-pic" src="{{request.user.customer.profile_pic.url}}">
+			<img class="profile-pic" src="">
 		</div>
 	</div>
 	<div class="col-md-9">
 		<div class="card card-body">
-			<form method="POST" action="">
+			<form method="POST" action="" enctype="multipart/form-data">
+
+				{% csrf_token %}
+
+				{{form | crispy }}
 
 				<input class="btn btn-primary" type="submit" name="Update Information">
 			</form>

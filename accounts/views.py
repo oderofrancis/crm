@@ -63,7 +63,7 @@ def logoutUser(request):
 
 
 @login_required(login_url='login')
-@admin_only
+# @admin_only
 def home(request):
 	customers = Customer.objects.all()
 	orders = Order.objects.all()
@@ -84,7 +84,7 @@ def home(request):
 # for user-page
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
+# @allowed_users(allowed_roles=['customer'])
 
 def userPage(request):
 	orders = request.user.customer.order_set.all()
@@ -102,16 +102,20 @@ def userPage(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['customer'])
+# @allowed_users(allowed_roles=['customer'])
 
 def accountSettings(request):
-	context = {}
+	
+	customer = request.user.customer
+	form = CustomerForm(instance=customer)
+
+	context = {'form':form}
 
 	return render(request,'accounts/account_settings.html',context)
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+# @allowed_users(allowed_roles=['admin'])
 def product(request):
 	products = Product.objects.all()
 
@@ -122,7 +126,7 @@ def product(request):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+# @allowed_users(allowed_roles=['admin'])
 def customer(request,pk_test):
 	
 	customer = Customer.objects.get(id=pk_test)
@@ -142,7 +146,7 @@ def customer(request,pk_test):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+# @allowed_users(allowed_roles=['admin'])
 def createOrder(request,pk):
 	customer = Customer.objects.get(id=pk)
 	form = OrderForm(initial={'customer':customer})
@@ -159,7 +163,7 @@ def createOrder(request,pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+# @allowed_users(allowed_roles=['admin'])
 def updateOrder(request,pk):
 
 	order = Order.objects.get(id=pk)
@@ -178,7 +182,7 @@ def updateOrder(request,pk):
 
 
 @login_required(login_url='login')
-@allowed_users(allowed_roles=['admin'])
+# @allowed_users(allowed_roles=['admin'])
 def deleteOrder(request,pk):
 	order = Order.objects.get(id=pk)
 	if request.method =='POST':
