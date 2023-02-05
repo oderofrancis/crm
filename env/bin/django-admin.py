@@ -1,4 +1,4 @@
-#!/media/afroteop/da442186-249a-498d-9496-21fc43465d5f/projects/crm/env/bin/python
+#!/media/afroteop/kidero/projects/old ones/crm/env/bin/python
 # When the django-admin.py deprecation ends, remove this script.
 import warnings
 

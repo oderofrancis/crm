@@ -1,4 +1,6 @@
-#!/media/afroteop/da442186-249a-498d-9496-21fc43465d5f/projects/crm/env/bin/python
+#!/bin/sh
+'''exec' "/media/afroteop/kidero/projects/old ones/crm/env/bin/python" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys
